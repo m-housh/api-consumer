@@ -12,9 +12,6 @@ public protocol ApiConsumer {
     
     var container: Container { get }
     var config: ApiConsumerConfig { get }
-    
-    init(container: Container, config: ApiConsumerConfig)
-    
     func client() throws -> Client
     func send(_ req: Request) throws -> Future<Response>
     func request(path: String, method: HTTPMethod, headers: HTTPHeaders) throws -> Request
@@ -49,13 +46,4 @@ extension ApiConsumer {
         return request
     }
 }
-
-extension ApiConsumer where Self: ServiceType {
-    
-    public func makeService(for worker: Container) throws -> Self {
-        let config = try worker.make(ApiConsumerConfig.self)
-        return Self(container: worker, config: config)
-    }
-}
-
 
