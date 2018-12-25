@@ -16,13 +16,13 @@ public protocol CRUDConsumer: ApiConsumer {
     func save<T, C>(_ data: T) throws -> Future<C> where T: Content, C: Decodable
     func delete(id: UUID) throws -> Future<Void>
     func get<T>(id: UUID) throws -> Future<T> where T: Content
-    
+    func request(path: String, method: HTTPMethod, headers: HTTPHeaders) throws -> Request
     
 }
 
 extension CRUDConsumer {
     
-    private func request(path: String? = nil, method: HTTPMethod = .GET, headers: HTTPHeaders = .init()) throws -> Request {
+    public func request(path: String? = nil, method: HTTPMethod = .GET, headers: HTTPHeaders = .init()) throws -> Request {
         
         let basicRequest = BasicApiRequest(
             path: path ?? self.path,
